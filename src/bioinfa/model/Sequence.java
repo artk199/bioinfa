@@ -1,5 +1,7 @@
 package bioinfa.model;
 
+import bioinfa.util.BioUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,11 @@ public class Sequence {
 	public Sequence(String symbols){
 		setSymbols(symbols);
 	}
-	
+
+	public Sequence(List<DNASymbol> symbols){
+		this.symbols = symbols;
+	}
+
 	public List<DNASymbol> getSymbols() {
 		return symbols;
 	}
@@ -26,9 +32,21 @@ public class Sequence {
 			this.symbols.add(DNASymbol.convert(String.valueOf(symbols.charAt(i))));
 		}
 	}
-	
+
+	public int getLength() {
+		return symbols.size();
+	}
+
+	public DNASymbol getSymbol(int position){
+		return symbols.get(position);
+	}
+
 	@Override
-	public String toString(){
-		return symbols.toString();
+	public String toString() {
+		String result = "";
+		for (DNASymbol symbol : symbols){
+			result += symbol.getSymbol();
+		}
+		return result;
 	}
 }

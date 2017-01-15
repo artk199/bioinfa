@@ -1,9 +1,9 @@
 package bioinfa;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
-public class TestTest extends TestCase {
+public class TestTest{
+
 	public void TestTestingTools(){
 		Assert.assertEquals(true, false);
 	}
