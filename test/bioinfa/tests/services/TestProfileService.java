@@ -2,7 +2,6 @@ package bioinfa.tests.services;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -10,8 +9,8 @@ import org.junit.Test;
 
 import bioinfa.ProfileService;
 import bioinfa.model.DNASymbol;
+import bioinfa.model.ProfileMatrix;
 import bioinfa.model.Sequence;
-
 
 public class TestProfileService {
 	private ProfileService service;
@@ -33,13 +32,13 @@ public class TestProfileService {
 		Sequence secondSequence = new Sequence("CAT-");
 		Sequence thirdSequence = new Sequence("-CCG");
 		
-		Map<DNASymbol, List<Double>> matrix = service.computeProfile(Arrays.asList(firstSequence, secondSequence, thirdSequence));
+		ProfileMatrix matrix = service.computeProfile(Arrays.asList(firstSequence, secondSequence, thirdSequence));
 		
-		Assert.assertArrayEquals(AValues.toArray(), matrix.get(DNASymbol.A).toArray());
-		Assert.assertArrayEquals(TValues.toArray(), matrix.get(DNASymbol.T).toArray());
-		Assert.assertArrayEquals(GValues.toArray(), matrix.get(DNASymbol.G).toArray());
-		Assert.assertArrayEquals(CValues.toArray(), matrix.get(DNASymbol.C).toArray());
-		Assert.assertArrayEquals(EmptyValues.toArray(), matrix.get(DNASymbol.EMPTY).toArray());
+		Assert.assertArrayEquals(AValues.toArray(), matrix.getValuesForSymbol(DNASymbol.A).toArray());
+		Assert.assertArrayEquals(TValues.toArray(), matrix.getValuesForSymbol(DNASymbol.T).toArray());
+		Assert.assertArrayEquals(GValues.toArray(), matrix.getValuesForSymbol(DNASymbol.G).toArray());
+		Assert.assertArrayEquals(CValues.toArray(), matrix.getValuesForSymbol(DNASymbol.C).toArray());
+		Assert.assertArrayEquals(EmptyValues.toArray(), matrix.getValuesForSymbol(DNASymbol.EMPTY).toArray());
 	}
 	
 	@Test
@@ -54,12 +53,12 @@ public class TestProfileService {
 		Sequence secondSequence = new Sequence("AC-A");
 		Sequence thirdSequence =  new Sequence("ACC-");
 		
-		Map<DNASymbol, List<Double>> matrix = service.computeProfile(Arrays.asList(firstSequence, secondSequence, thirdSequence));
+		ProfileMatrix matrix = service.computeProfile(Arrays.asList(firstSequence, secondSequence, thirdSequence));
 		
-		Assert.assertArrayEquals(AValues.toArray(), matrix.get(DNASymbol.A).toArray());
-		Assert.assertArrayEquals(TValues.toArray(), matrix.get(DNASymbol.T).toArray());
-		Assert.assertArrayEquals(GValues.toArray(), matrix.get(DNASymbol.G).toArray());
-		Assert.assertArrayEquals(CValues.toArray(), matrix.get(DNASymbol.C).toArray());
-		Assert.assertArrayEquals(EmptyValues.toArray(), matrix.get(DNASymbol.EMPTY).toArray());
+		Assert.assertArrayEquals(AValues.toArray(), matrix.getValuesForSymbol(DNASymbol.A).toArray());
+		Assert.assertArrayEquals(TValues.toArray(), matrix.getValuesForSymbol(DNASymbol.T).toArray());
+		Assert.assertArrayEquals(GValues.toArray(), matrix.getValuesForSymbol(DNASymbol.G).toArray());
+		Assert.assertArrayEquals(CValues.toArray(), matrix.getValuesForSymbol(DNASymbol.C).toArray());
+		Assert.assertArrayEquals(EmptyValues.toArray(), matrix.getValuesForSymbol(DNASymbol.EMPTY).toArray());
 	}
 }

@@ -2,8 +2,6 @@ package bioinfa;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import bioinfa.model.*;
 
@@ -22,13 +20,15 @@ public class Main {
 	public static void presentProfiles(List<Sequence> sequences){
 		System.out.println(String.format(PROFILE_EXAMPLE_FORMAT, sequences.toString()));
 		ProfileService profileService = new ProfileService();	
-		Map<DNASymbol, List<Double>> matrix = profileService.computeProfile(sequences);
+		ProfileMatrix matrix = profileService.computeProfile(sequences);
 		printProfileMatrix(matrix);
 	}
 	
-	private static void printProfileMatrix(Map<DNASymbol, List<Double>> matrix){
-		for(Entry<DNASymbol, List<Double>> mapEntry : matrix.entrySet()){
-			System.out.println(String.format(PROFILE_SYMBOL_FORMAT, mapEntry.getKey(), mapEntry.getValue().toString()));
+	private static void printProfileMatrix(ProfileMatrix matrix){
+		List<DNASymbol> symbols = matrix.getSymbols();
+		for(DNASymbol symbol : symbols){
+			String symbolValues = matrix.getValuesForSymbol(symbol).toString();
+			System.out.println(String.format(PROFILE_SYMBOL_FORMAT, symbol, symbolValues));
 		}
 	}
 }
