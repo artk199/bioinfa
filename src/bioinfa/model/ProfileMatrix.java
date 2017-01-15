@@ -6,36 +6,29 @@ import java.util.List;
 import java.util.Map;
 
 public class ProfileMatrix {
-	private Map<DNASymbol, List<Integer>> matrix;
-	private int sequences;
+	private Map<DNASymbol, List<Double>> matrix;
+	private int sequencesCount;
+	private int sequencesLength;
 	
 	public ProfileMatrix(){
 		this.matrix = new HashMap<>();
-		this.sequences = 0;
+		this.sequencesCount = 0;
+		this.sequencesLength = 0;
 	}
 	
-	public void addSequence(Sequence sequence){
-		sequences++;
-		List<DNASymbol> symbols = sequence.getSymbols();
-		int i = 0;
-		for(DNASymbol symbol : symbols){
-			increaseSymbolAtIndex(symbol, i);
-			i++;
-		}
-	}
-	
-	private void increaseSymbolAtIndex(DNASymbol symbol, int index){
-		List<Integer> positions = this.matrix.get(symbol);
-		positions.set(index, positions.get(index) + 1);
-		this.matrix.put(symbol, positions);
+	public void setValue(DNASymbol symbol, int index, double value){
+		List<Double> positions = this.matrix.get(symbol);
+		positions.set(index, value);
 	}
 	
 	public void initMatrix(int sequenceLength){
+		this.matrix = new HashMap<>();
+		this.sequencesLength = sequenceLength;
 		for(DNASymbol symbol : DNASymbol.getBasicSymbols()){
-			List<Integer> emptyList = new ArrayList<>(sequenceLength);
+			List<Double> emptyList = new ArrayList<>(sequenceLength);
 			
 			for(int i = 0; i < sequenceLength; i++){
-				emptyList.add(0);
+				emptyList.add(0.0);
 			}
 			
 			this.matrix.put(symbol, emptyList);
@@ -47,10 +40,18 @@ public class ProfileMatrix {
 	}
 	
 	public List<Double> getValuesForSymbol(DNASymbol symbol){
-		List<Double> values =  new ArrayList<>();
-		for(Integer value : this.matrix.get(symbol)){
-			values.add((1.0 * value) / sequences);
-		}
-		return values;
+		return this.matrix.get(symbol);
+	}
+
+	public int getSequencesCount() {
+		return sequencesCount;
+	}
+
+	public void setSequencesCount(int sequencesCount) {
+		this.sequencesCount = sequencesCount;
+	}
+
+	public int getSequencesLength() {
+		return sequencesLength;
 	}
 }
