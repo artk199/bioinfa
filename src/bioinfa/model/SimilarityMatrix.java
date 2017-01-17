@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class SimilarityMatrix {
 
-    private Map<DNASymbol,Map<DNASymbol,Integer>> similarity;
+    private static Map<DNASymbol,Map<DNASymbol,Integer>> similarity;
 
     /*
 
@@ -19,7 +19,7 @@ public class SimilarityMatrix {
 
      */
 
-    public SimilarityMatrix(){
+    private static void init(){
         similarity = new HashMap<>();
         Map<DNASymbol,Integer> simForA = new HashMap<>();
         simForA.put(DNASymbol.G,0);
@@ -29,7 +29,7 @@ public class SimilarityMatrix {
         similarity.put(DNASymbol.A,simForA);
 
         Map<DNASymbol,Integer> simForG = new HashMap<>();
-        simForG.put(DNASymbol.G,0);
+        simForG.put(DNASymbol.A,0);
         simForG.put(DNASymbol.C,0);
         simForG.put(DNASymbol.T,0);
         simForG.put(DNASymbol.G,1);
@@ -48,8 +48,63 @@ public class SimilarityMatrix {
         simForT.put(DNASymbol.C,0);
         simForT.put(DNASymbol.T,1);
         similarity.put(DNASymbol.T,simForT);
+
+        Map<DNASymbol,Integer> simForEmpty = new HashMap<>();
+        simForEmpty.put(DNASymbol.A,0);
+        simForEmpty.put(DNASymbol.G,0);
+        simForEmpty.put(DNASymbol.C,0);
+        simForEmpty.put(DNASymbol.T,0);
+        simForEmpty.put(DNASymbol.EMPTY,1);
+        similarity.put(DNASymbol.EMPTY,simForEmpty);
     }
-    public int get(DNASymbol a,DNASymbol b){
+
+    private static void init2(){
+        similarity = new HashMap<>();
+        Map<DNASymbol,Integer> simForA = new HashMap<>();
+        simForA.put(DNASymbol.G,-1);
+        simForA.put(DNASymbol.C,-1);
+        simForA.put(DNASymbol.T,-1);
+        simForA.put(DNASymbol.A,1);
+        similarity.put(DNASymbol.A,simForA);
+
+        Map<DNASymbol,Integer> simForG = new HashMap<>();
+        simForG.put(DNASymbol.A,-1);
+        simForG.put(DNASymbol.C,-1);
+        simForG.put(DNASymbol.T,-1);
+        simForG.put(DNASymbol.G,1);
+        similarity.put(DNASymbol.G,simForG);
+
+        Map<DNASymbol,Integer> simForC = new HashMap<>();
+        simForC.put(DNASymbol.A,-1);
+        simForC.put(DNASymbol.G,-1);
+        simForC.put(DNASymbol.T,-1);
+        simForC.put(DNASymbol.C,1);
+        similarity.put(DNASymbol.C,simForC);
+
+        Map<DNASymbol,Integer> simForT = new HashMap<>();
+        simForT.put(DNASymbol.A,-1);
+        simForT.put(DNASymbol.G,-1);
+        simForT.put(DNASymbol.C,-1);
+        simForT.put(DNASymbol.T,1);
+        similarity.put(DNASymbol.T,simForT);
+
+        Map<DNASymbol,Integer> simForEmpty = new HashMap<>();
+        simForEmpty.put(DNASymbol.A,-1);
+        simForEmpty.put(DNASymbol.G,-1);
+        simForEmpty.put(DNASymbol.C,-1);
+        simForEmpty.put(DNASymbol.T,-1);
+        simForEmpty.put(DNASymbol.EMPTY,1);
+        similarity.put(DNASymbol.EMPTY,simForEmpty);
+    }
+
+
+
+    public static int get(DNASymbol a,DNASymbol b){
+        if(similarity == null)
+            init2();
+        if(b == DNASymbol.EMPTY){
+            return -1;
+        }
         return similarity.get(a).get(b);
     }
 

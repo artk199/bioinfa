@@ -26,4 +26,17 @@ public class Multialigment {
 	public void setSimilarityMatrix(SimilarityMatrix similarityMatrix) {
 		this.similarityMatrix = similarityMatrix;
 	}
+
+	@Override
+	public String toString() {
+		String ret = "";
+		for (Sequence s : sequences){
+			ret+=s.toString()+"\n";
+		}
+		return ret;
+	}
+
+	public int getLength() {
+		return sequences.get(0).getLength();
+	}
 }

@@ -2,6 +2,7 @@ package bioinfa.util;
 
 import bioinfa.Main;
 import bioinfa.model.DNASymbol;
+import bioinfa.model.Multialigment;
 import bioinfa.model.ProfileMatrix;
 import bioinfa.model.Sequence;
 
@@ -22,9 +23,9 @@ public class BioUtils {
         }
     }
 
-    public static void printNeedlemanWunschGrid(Sequence firstSequence, Sequence secondSequence, int[][] matrix) {
-        /*System.out.println("  Neddleman-Wunsch Grid\n\n");
-        System.out.println("  "+firstSequence.toString());
+    public static void printNeedlemanWunschGrid(Multialigment firstSequence, Multialigment secondSequence, double[][] matrix) {
+        System.out.println("\n\n Neddleman-Wunsch Grid\n\n");
+        /*System.out.println("  "+firstSequence.toString());
         System.out.print(" ");
         for (int i = 0; i < firstSequence.getLength(); i++) {
             System.out.print(matrix[0][i]);
@@ -39,7 +40,7 @@ public class BioUtils {
         }*/
         for (int row = 0; row < matrix.length; row++) {
             for (int col = 0; col < matrix[row].length; col++) {
-                System.out.printf("%4d", matrix[row][col]);
+                System.out.printf("%4.4f ", matrix[row][col]);
             }
             System.out.println();
         }
