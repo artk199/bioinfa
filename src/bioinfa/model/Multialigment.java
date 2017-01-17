@@ -1,12 +1,13 @@
 package bioinfa.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class Multialigment {
-	private List<Sequence> sequences;
+	private List<Sequence> sequences = new LinkedList<>();
 	private Sequence result;
 	private SimilarityMatrix similarityMatrix;
-	
+
 	public List<Sequence> getSequences() {
 		return sequences;
 	}

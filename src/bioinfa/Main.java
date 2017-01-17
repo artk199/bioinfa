@@ -4,11 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 
 import bioinfa.model.*;
+import bioinfa.util.BioUtils;
 
 public class Main {
 	private static final String PROFILE_EXAMPLE_FORMAT = "\nEXAMPLE PROFILE: %s";
 	private static final String JOINED_PROFILE_EXAMPLE_FORMAT = "\nEXAMPLE OF TWO JOINED PROFILES: %s + %s";
-	private static final String PROFILE_SYMBOL_FORMAT = "[%s]\t- %s";
 	
 	public static void main(String[] args){
 		List<Sequence> sequencesA = Arrays.asList(new Sequence("TCCA"), 
@@ -25,7 +25,7 @@ public class Main {
 		System.out.println(String.format(PROFILE_EXAMPLE_FORMAT, sequences.toString()));
 		ProfileService profileService = new ProfileService();	
 		ProfileMatrix matrix = profileService.computeProfile(sequences);
-		printProfileMatrix(matrix);
+		BioUtils.printProfileMatrix(matrix);
 	}
 	
 	public static void presentJoinedProfiles(List<Sequence> sequencesA, List<Sequence> sequencesB){
@@ -34,14 +34,7 @@ public class Main {
 		ProfileMatrix matrixA = profileService.computeProfile(sequencesA);
 		ProfileMatrix matrixB = profileService.computeProfile(sequencesB);
 		ProfileMatrix joinedMatrix = profileService.joinProfiles(matrixA, matrixB);
-		printProfileMatrix(joinedMatrix);
+		BioUtils.printProfileMatrix(joinedMatrix);
 	}
-	
-	private static void printProfileMatrix(ProfileMatrix matrix){
-		List<DNASymbol> symbols = matrix.getSymbols();
-		for(DNASymbol symbol : symbols){
-			String symbolValues = matrix.getValuesForSymbol(symbol).toString();
-			System.out.println(String.format(PROFILE_SYMBOL_FORMAT, symbol, symbolValues));
-		}
-	}
+
 }

@@ -1,19 +1,47 @@
 package bioinfa.util;
 
+import bioinfa.Main;
 import bioinfa.model.DNASymbol;
+import bioinfa.model.ProfileMatrix;
+import bioinfa.model.Sequence;
+
+import java.util.List;
 
 /**
  * Created by Artur on 15.01.2017.
  */
 public class BioUtils {
-    public static DNASymbol convertCharToDNASymbol(char c) {
-        switch (c){
-            case 'A': return  DNASymbol.A;
-            case 'G': return  DNASymbol.G;
-            case 'C': return  DNASymbol.C;
-            case 'T': return  DNASymbol.T;
-            case '-': return  DNASymbol.EMPTY;
-            default: throw new IllegalArgumentException("Invalid DNA Symbol" + c);
+
+    private static final String PROFILE_SYMBOL_FORMAT = "[%s]\t- %s";
+
+    public static void printProfileMatrix(ProfileMatrix matrix){
+        List<DNASymbol> symbols = matrix.getSymbols();
+        for(DNASymbol symbol : symbols){
+            String symbolValues = matrix.getValuesForSymbol(symbol).toString();
+            System.out.println(String.format(PROFILE_SYMBOL_FORMAT, symbol, symbolValues));
+        }
+    }
+
+    public static void printNeedlemanWunschGrid(Sequence firstSequence, Sequence secondSequence, int[][] matrix) {
+        /*System.out.println("  Neddleman-Wunsch Grid\n\n");
+        System.out.println("  "+firstSequence.toString());
+        System.out.print(" ");
+        for (int i = 0; i < firstSequence.getLength(); i++) {
+            System.out.print(matrix[0][i]);
+        }
+        System.out.print("\n");
+        for (int i = 0; i < secondSequence.getLength(); i++) {
+            System.out.print(secondSequence.getSymbol(i).getSymbol());
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j]);
+            }
+            System.out.println();
+        }*/
+        for (int row = 0; row < matrix.length; row++) {
+            for (int col = 0; col < matrix[row].length; col++) {
+                System.out.printf("%4d", matrix[row][col]);
+            }
+            System.out.println();
         }
     }
 }
