@@ -29,12 +29,10 @@ public class ProgressiveAlignerTest {
         multialigment.getSequences().add(new Sequence("TCCA"));
         multialigment.getSequences().add(new Sequence("AC-A"));
         multialigment.getSequences().add(new Sequence("ACC-"));
-        multialigment.setResult(new Sequence("ACC-"));
         Multialigment multialigment2 = new Multialigment();
         multialigment2.getSequences().add(new Sequence("TA-G"));
         multialigment2.getSequences().add(new Sequence("CAT-"));
         multialigment2.getSequences().add(new Sequence("-CCG"));
-        multialigment2.setResult(new Sequence("-CCG"));
 
         aligner.alignByProfiles(multialigment,multialigment2);
     }
