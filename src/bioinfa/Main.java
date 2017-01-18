@@ -1,5 +1,6 @@
 package bioinfa;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,6 +21,11 @@ public class Main {
 		List<Sequence> sequencesB = Arrays.asList(new Sequence("TA-G"), 
 				new Sequence("CAT-"), new Sequence("-CCG"));
 
+		List<Sequence> sequencesC = Arrays.asList(
+				new Sequence("TAACG"),
+				new Sequence("CATT"),
+				new Sequence("ACCG"));
+
 		Multialigment m1 = new Multialigment();
 		m1.getSequences().add(new Sequence("AAAAAGCA"));
 		Multialigment m2 = new Multialigment();
@@ -32,6 +38,19 @@ public class Main {
 		presentConsensus(sequencesA);
 		presentConsensus(sequencesB);
 		presentAligmentByProfile(m1,m2);
+		presentUGMAAligment(sequencesC);
+	}
+	
+	private static void presentUGMAAligment(List<Sequence> sequences){
+		System.out.println("\nPROGRESSIVE ALIGMENT EXAMPLE\n");
+		UGMAAlignerService service = new UGMAAlignerService();
+		List<Multialigment> multialigments = new ArrayList<>();
+		for(Sequence seq : sequences){
+			Multialigment m = new Multialigment();
+			m.getSequences().add(seq);
+			multialigments.add(m);
+		}
+		System.out.println(service.alignProgressiveWithUGMA(multialigments));
 	}
 
 	private static void presentAligmentByProfile(Multialigment m1, Multialigment m2) {

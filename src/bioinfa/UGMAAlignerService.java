@@ -2,6 +2,9 @@ package bioinfa;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import bioinfa.consensus.ConsensusWordResolver;
+import bioinfa.consensus.SimpleConsensusWordResolver;
 import bioinfa.model.BestUGMAPair;
 import bioinfa.model.DNASymbol;
 import bioinfa.model.Multialigment;
@@ -10,6 +13,7 @@ import bioinfa.model.SimilarityMatrix;
 
 public class UGMAAlignerService {
 	private ProgressiveAligner aligner = new ProgressiveAligner();
+	private ConsensusWordResolver consensusWordResolver = new SimpleConsensusWordResolver();
 	
 	public Multialigment alignProgressiveWithUGMA(List<Multialigment> aligments){
 		double UGMAMatrix[][] = initUGMA(aligments);//initExampleUGMAMatrix();//
@@ -18,7 +22,7 @@ public class UGMAAlignerService {
 		while(multialigments.size() > 1){
 			printUGMAMatrix(UGMAMatrix, aligments);
 			BestUGMAPair bestPair = findBestAligment(UGMAMatrix);
-			upadeAlignedSequences(multialigments, bestPair);		
+			upadeAlignedSequences(multialigments, bestPair);
 			UGMAMatrix = updateUGMAMatrix(UGMAMatrix, bestPair);	
 		}
 		
@@ -29,7 +33,7 @@ public class UGMAAlignerService {
 	private void upadeAlignedSequences(List<Multialigment> alignedSequences, BestUGMAPair bestPair){
 		Multialigment firstSeq = alignedSequences.get(bestPair.getFirstPosition());
 		Multialigment secondSeq = alignedSequences.get(bestPair.getSecondPosition());
-		Multialigment multialigment = alignSequences(firstSeq, secondSeq);			
+		Multialigment multialigment = alignSequences(firstSeq, secondSeq);
 		alignedSequences.set(bestPair.getFirstPosition(), multialigment);
 		alignedSequences.remove(bestPair.getSecondPosition());
 	}
@@ -146,21 +150,20 @@ public class UGMAAlignerService {
 	}
 	
 	// Returns double - information about how different are sequences (the less result, the less different)
-	private double computeDifferenceBetweenSequences(Multialigment m1, Multialigment m2){
-		Multialigment longerSeq = m1.getLength() > m2.getLength() ? m1 : m2;
-		Multialigment smallerSeq = m1.getLength() > m2.getLength() ? m2 : m1;
-		
-		double diff = 0;
-		for(int i = 0; i < longerSeq.getLength(); i++){
-			// TODO: Obliczac to w lepszy sposob
-			Sequence ff1 = longerSeq.getSequences().get(0);
-			Sequence ff2 = smallerSeq.getSequences().get(0);
-			DNASymbol firstSymbol = ff1.getSymbol(i);
-			DNASymbol secondSymbol = ff2.getLength() > i ? ff2.getSymbol(i) : DNASymbol.EMPTY;
-			
-			diff += -1 * SimilarityMatrix.get(firstSymbol, secondSymbol);
+	public double computeDifferenceBetweenSequences(Multialigment m1, Multialigment m2){
+		Sequence cons1 = consensusWordResolver.resolve(m1.getSequences());
+		Sequence cons2 = consensusWordResolver.resolve(m2.getSequences());
+
+		int length = cons1.getLength() < cons2.getLength()?cons1.getLength():cons2.getLength();
+		int score = cons1.getLength() > cons2.getLength()?cons1.getLength():cons2.getLength();
+
+		for (int i = 0; i < length; i++) {
+			DNASymbol s1 = cons1.getSymbol(i);
+			DNASymbol s2 = cons2.getSymbol(i);
+			if(s1 == s2)
+				score--;
 		}
-		
-		return diff;
+
+		return score;
 	}
 }
