@@ -9,30 +9,38 @@ import bioinfa.model.Sequence;
 import bioinfa.model.SimilarityMatrix;
 
 public class UGMAAlignerService {
-	public Multialigment alignProgressiveWithUGMA(List<Sequence> sequences){
-		int size = sequences.size();
-		double UGMAMatrix[][] = initExampleUGMAMatrix();//initUGMA(sequences);
-		List<BestUGMAPair> bestPairsInOrder = new ArrayList<>();
+	private ProgressiveAligner aligner = new ProgressiveAligner();
+	
+	public Sequence alignProgressiveWithUGMA(List<Sequence> sequences){
+		double UGMAMatrix[][] = initUGMA(sequences);//initExampleUGMAMatrix();//
+		List<Sequence> alignedSequences = new ArrayList<>(sequences);
 			
-//		while(UGMAMatrix.length > 1){
+		while(alignedSequences.size() > 1){
 			printUGMAMatrix(UGMAMatrix, sequences);
-			
 			BestUGMAPair bestPair = findBestAligment(UGMAMatrix);
-			System.out.println("\nBEST PAIR: " + bestPair.toString());
-			bestPairsInOrder.add(bestPair);
-			UGMAMatrix = updateUGMAMatrix(UGMAMatrix, bestPair);
-			
-			printUGMAMatrix(UGMAMatrix, sequences);
-			
-			 bestPair = findBestAligment(UGMAMatrix);
-			System.out.println("\nBEST PAIR: " + bestPair.toString());
-			bestPairsInOrder.add(bestPair);
-			UGMAMatrix = updateUGMAMatrix(UGMAMatrix, bestPair);
-			
-			printUGMAMatrix(UGMAMatrix, sequences);
-//		}
+			upadeAlignedSequences(alignedSequences, bestPair);		
+			UGMAMatrix = updateUGMAMatrix(UGMAMatrix, bestPair);	
+		}
 		
-		return null;
+		return alignedSequences.get(0);
+	}
+	
+	// Updates first sequence with aligned one and removes second from list
+	private void upadeAlignedSequences(List<Sequence> alignedSequences, BestUGMAPair bestPair){
+		Sequence firstSeq = alignedSequences.get(bestPair.getFirstPosition());
+		Sequence secondSeq = alignedSequences.get(bestPair.getSecondPosition());
+		Sequence alignedSeq = alignSequences(firstSeq, secondSeq);			
+		alignedSequences.set(bestPair.getFirstPosition(), alignedSeq);
+		alignedSequences.remove(bestPair.getSecondPosition());
+	}
+	
+	private Sequence alignSequences(Sequence firstSeq, Sequence secondSeq){
+		Multialigment m1 = new Multialigment();
+		Multialigment m2 = new Multialigment();
+		m1.getSequences().add(firstSeq);
+		m2.getSequences().add(secondSeq);
+		Sequence result = aligner.alignByProfiles(m1, m2).getSequences().get(0);
+		return result;
 	}
 	
 	private double[][] initExampleUGMAMatrix(){

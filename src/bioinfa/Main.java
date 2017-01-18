@@ -39,7 +39,7 @@ public class Main {
 	
 	private static void presentUGMAAligment(List<Sequence> sequences){
 		UGMAAlignerService service = new UGMAAlignerService();
-		service.alignProgressiveWithUGMA(sequences);
+		System.out.println(service.alignProgressiveWithUGMA(sequences));
 	}
 
 	private static void presentAligmentByProfile(Multialigment m1, Multialigment m2) {
