@@ -36,8 +36,10 @@ public class Main {
 		// Init example multialigments
 		Multialigment m1 = BioUtils.getMultialigmentFromSequencies("AAAAAGCA");
 		Multialigment m2 = BioUtils.getMultialigmentFromSequencies("TCAAAGAGAT");
-		Multialigment m3 = BioUtils.getMultialigmentFromSequencies("AAACATAG", "CCAAATGC");
-		Multialigment m4 = BioUtils.getMultialigmentFromSequencies("ATAG", "CCAA");
+		Multialigment m3 = BioUtils.getMultialigmentFromSequencies("AAACATAG");
+		Multialigment m4 = BioUtils.getMultialigmentFromSequencies("ATAG");
+		Multialigment m5 = BioUtils.getMultialigmentFromSequencies("CCAA");
+		Multialigment m6 = BioUtils.getMultialigmentFromSequencies("CCAAATGC","AAAAAAAA");
 		
 		// Display results of examples
 		presentProfiles(sequencesA);
@@ -47,7 +49,7 @@ public class Main {
 		presentConsensus(sequencesB);
 		presentAligmentByProfile(m1,m2);
 		presentUGMAAligment(sequencesC);
-		presentUGMAAligmentForMutlialigments(Arrays.asList(m1, m2, m3, m4));
+		presentUGMAAligmentForMutlialigments(Arrays.asList(m1, m2, m3, m4,m5,m6));
 	}
 	
 	private static void presentUGMAAligment(List<Sequence> sequences){

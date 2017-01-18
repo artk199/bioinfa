@@ -40,11 +40,11 @@ public class ProgressiveAlignerTest {
     @Test
     public void testAlign2(){
         Multialigment multialigment = new Multialigment();
-        multialigment.getSequences().add(new Sequence("GGTACCAAATAGAA"));
+        multialigment.getSequences().add(new Sequence("GCATGCC"));
         Multialigment multialigment2 = new Multialigment();
-        multialigment2.getSequences().add(new Sequence("GGCACCAAACAGAA"));
+        multialigment2.getSequences().add(new Sequence("GATTACA"));
 
-        aligner.alignByProfiles(multialigment,multialigment2);
+        System.out.println(aligner.alignByProfiles(multialigment, multialigment2));
     }
 
     @Test
