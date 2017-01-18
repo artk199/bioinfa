@@ -20,7 +20,6 @@ public class UGMAAlignerService {
 		List<Multialigment> multialigments = new ArrayList<>(aligments);
 			
 		while(multialigments.size() > 1){
-			printUPGMAMatrix(upgmaMatrix, aligments);
 			BestUPGMAPair bestPair = findBestAligment(upgmaMatrix);
 			upadeAlignedSequences(multialigments, bestPair);
 			upgmaMatrix = updateUGMAMatrix(upgmaMatrix, bestPair);	
@@ -134,6 +133,7 @@ public class UGMAAlignerService {
 		return score;
 	}
 	
+	@SuppressWarnings("unused")
 	private double[][] initExampleUGMAMatrix(){
 		double result[][] = {
 			{0.0, 17.0, 21.0, 31.0, 23.0}, 
@@ -145,17 +145,14 @@ public class UGMAAlignerService {
 		return result;
 	}
 	
+	@SuppressWarnings("unused")
 	private void printUPGMAMatrix(double matrix[][], List<Multialigment> sequences){
 		System.out.println("\nUGMA MATRIX: \n");
 		
 		int n = matrix.length;
-		//System.out.print(" \t");
-		//for(int i = 0; i < n; i++){
-		//	System.out.print(sequences.get(i) + "\t");
-		//}
+
 		System.out.println("");
 		for(int i = 0; i < n; i++){
-			//System.out.print(sequences.get(i) + "\t");
 			for(int j = 0; j < n; j++){
 				System.out.print(matrix[i][j]+"\t");
 			}

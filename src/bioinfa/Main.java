@@ -30,7 +30,8 @@ public class Main {
 		List<Sequence> sequencesC = Arrays.asList(
 				new Sequence("TAACG"),
 				new Sequence("CATT"),
-				new Sequence("ACCG")
+				new Sequence("ACCG"),
+				new Sequence("TTT")
 		);
 
 		// Init example multialigments
@@ -50,7 +51,8 @@ public class Main {
 	}
 	
 	private static void presentUGMAAligment(List<Sequence> sequences){
-		System.out.println("\nPROGRESSIVE ALIGMENT EXAMPLE\n");
+		System.out.println("\nPROGRESSIVE ALIGMENT EXAMPLE");
+		System.out.println("... for sequences: " + sequences + "\n");
 		UGMAAlignerService service = new UGMAAlignerService();
 		List<Multialigment> multialigments = new ArrayList<>();
 		for(Sequence seq : sequences){
