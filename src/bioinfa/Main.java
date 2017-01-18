@@ -17,21 +17,9 @@ public class Main {
 	
 	public static void main(String[] args){
 		// Init example sequences
-		List<Sequence> sequencesA = Arrays.asList(
-				new Sequence("TCCA"), 
-				new Sequence("AC-A"), 
-				new Sequence("ACC-")
-		);
-		List<Sequence> sequencesB = Arrays.asList(
-				new Sequence("TA-G"), 
-				new Sequence("CAT-"), 
-				new Sequence("-CCG")
-		);
-		List<Sequence> sequencesC = Arrays.asList(
-				new Sequence("TAACG"),
-				new Sequence("CATT"),
-				new Sequence("ACCG")
-		);
+		List<Sequence> sequencesA = BioUtils.createSequencies("TCCA", "AC-A", "ACC-");
+		List<Sequence> sequencesB = BioUtils.createSequencies("TA-G", "CAT-", "-CCG");
+		List<Sequence> sequencesC = BioUtils.createSequencies("TAACG", "CATT", "ACCG");
 
 		// Init example multialigments
 		Multialigment m1 = BioUtils.getMultialigmentFromSequencies("AAAAAGCA");
@@ -68,7 +56,7 @@ public class Main {
 	
 	private static void presentUGMAAligmentForMutlialigments(List<Multialigment> multialigments){
 		System.out.println("\nPROGRESSIVE ALIGMENT EXAMPLE");
-		System.out.println("... for multialigments: " + multialigments + "\n");
+		System.out.println("... for multialigments: \n" + BioUtils.writeMutlialigments(multialigments) + "\n");
 		UGMAAlignerService service = new UGMAAlignerService();
 		Multialigment result = service.alignProgressiveWithUPGMA(multialigments);
 		System.out.println(result);

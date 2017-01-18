@@ -1,14 +1,12 @@
 package bioinfa.util;
 
-import bioinfa.Main;
+import java.util.ArrayList;
+import java.util.List;
+
 import bioinfa.model.DNASymbol;
 import bioinfa.model.Multialigment;
 import bioinfa.model.ProfileMatrix;
 import bioinfa.model.Sequence;
-
-import java.util.List;
-
-import javax.swing.text.MutableAttributeSet;
 
 /**
  * Created by Artur on 15.01.2017.
@@ -54,5 +52,34 @@ public class BioUtils {
     		multialigment.getSequences().add(new Sequence(seq));
 		}
     	return multialigment;
+    }
+    
+    public static List<Sequence> createSequencies(String ... sequences){
+    	List<Sequence> sequencesList = new ArrayList<>();
+    	for(String seq : sequences){
+    		sequencesList.add(new Sequence(seq));
+    	}
+    	return sequencesList;
+    }
+    
+    public static String writeMutlialigments(List<Multialigment> multialigments){
+    	StringBuilder sb = new StringBuilder();
+    	
+    	for(Multialigment m : multialigments){
+    		sb.append("[").append(writeMultialigment(m)).append("]\n");
+    	}
+    	
+    	return sb.toString();
+    }
+    
+    public static String writeMultialigment(Multialigment multialigment){
+    	StringBuilder str = new StringBuilder();
+		for(int i = 0; i < multialigment.getSequences().size(); i++){
+			str.append(multialigment.getSequences().get(i));
+			if(i < multialigment.getSequences().size() - 1){
+				str.append(", ");
+			}
+		}
+		return str.toString();
     }
 }
