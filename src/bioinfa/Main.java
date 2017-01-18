@@ -19,7 +19,9 @@ public class Main {
 				new Sequence("AC-A"), new Sequence("ACC-"));
 		List<Sequence> sequencesB = Arrays.asList(new Sequence("TA-G"), 
 				new Sequence("CAT-"), new Sequence("-CCG"));
-
+		List<Sequence> sequencesC = Arrays.asList(new Sequence("TAACG"), 
+				new Sequence("CATT"), new Sequence("ACCG"));
+		
 		Multialigment m1 = new Multialigment();
 		m1.getSequences().add(new Sequence("AAAAAGCA"));
 		Multialigment m2 = new Multialigment();
@@ -32,6 +34,12 @@ public class Main {
 		presentConsensus(sequencesA);
 		presentConsensus(sequencesB);
 		presentAligmentByProfile(m1,m2);
+		presentUGMAAligment(sequencesC);
+	}
+	
+	private static void presentUGMAAligment(List<Sequence> sequences){
+		UGMAAlignerService service = new UGMAAlignerService();
+		service.alignProgressiveWithUGMA(sequences);
 	}
 
 	private static void presentAligmentByProfile(Multialigment m1, Multialigment m2) {
