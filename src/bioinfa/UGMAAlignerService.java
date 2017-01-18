@@ -5,74 +5,41 @@ import java.util.List;
 
 import bioinfa.consensus.ConsensusWordResolver;
 import bioinfa.consensus.SimpleConsensusWordResolver;
-import bioinfa.model.BestUGMAPair;
+import bioinfa.model.BestUPGMAPair;
 import bioinfa.model.DNASymbol;
 import bioinfa.model.Multialigment;
 import bioinfa.model.Sequence;
-import bioinfa.model.SimilarityMatrix;
 
 public class UGMAAlignerService {
 	private ProgressiveAligner aligner = new ProgressiveAligner();
 	private ConsensusWordResolver consensusWordResolver = new SimpleConsensusWordResolver();
 	
-	public Multialigment alignProgressiveWithUGMA(List<Multialigment> aligments){
-		double UGMAMatrix[][] = initUGMA(aligments);//initExampleUGMAMatrix();//
+	// Returns multialigment with method UPGMA
+	public Multialigment alignProgressiveWithUPGMA(List<Multialigment> aligments){
+		double upgmaMatrix[][] = initUPGMA(aligments);//initExampleUGMAMatrix();//
 		List<Multialigment> multialigments = new ArrayList<>(aligments);
 			
 		while(multialigments.size() > 1){
-			printUGMAMatrix(UGMAMatrix, aligments);
-			BestUGMAPair bestPair = findBestAligment(UGMAMatrix);
+			printUPGMAMatrix(upgmaMatrix, aligments);
+			BestUPGMAPair bestPair = findBestAligment(upgmaMatrix);
 			upadeAlignedSequences(multialigments, bestPair);
-			UGMAMatrix = updateUGMAMatrix(UGMAMatrix, bestPair);	
+			upgmaMatrix = updateUGMAMatrix(upgmaMatrix, bestPair);	
 		}
 		
 		return multialigments.get(0);
 	}
 	
 	// Updates first sequence with aligned one and removes second from list
-	private void upadeAlignedSequences(List<Multialigment> alignedSequences, BestUGMAPair bestPair){
+	private void upadeAlignedSequences(List<Multialigment> alignedSequences, BestUPGMAPair bestPair){
 		Multialigment firstSeq = alignedSequences.get(bestPair.getFirstPosition());
 		Multialigment secondSeq = alignedSequences.get(bestPair.getSecondPosition());
-		Multialigment multialigment = alignSequences(firstSeq, secondSeq);
+		Multialigment multialigment = aligner.alignByProfiles(firstSeq, secondSeq);
 		alignedSequences.set(bestPair.getFirstPosition(), multialigment);
 		alignedSequences.remove(bestPair.getSecondPosition());
 	}
-	
-	private Multialigment alignSequences(Multialigment firstSeq, Multialigment secondSeq){
-		return aligner.alignByProfiles(firstSeq, secondSeq);
-	}
-	
-	private double[][] initExampleUGMAMatrix(){
-		double result[][] = {
-			{0.0, 17.0, 21.0, 31.0, 23.0}, 
-			{17.0, 0.0, 30.0, 34.0, 21.0}, 
-			{21.0, 30.0, 0.0, 28.0, 39.0},
-			{31.0, 34.0, 28.0, 0.0, 43.0},
-			{23.0, 21.0, 39.0, 43.0, 0.0}
-		};
-		return result;
-	}
-	
-	private void printUGMAMatrix(double matrix[][], List<Multialigment> sequences){
-		System.out.println("\nUGMA MATRIX: \n");
-		
-		int n = matrix.length;
-		//System.out.print(" \t");
-		//for(int i = 0; i < n; i++){
-		//	System.out.print(sequences.get(i) + "\t");
-		//}
-		System.out.println("");
-		for(int i = 0; i < n; i++){
-			//System.out.print(sequences.get(i) + "\t");
-			for(int j = 0; j < n; j++){
-				System.out.print(matrix[i][j]+"\t");
-			}
-			System.out.println("");
-		}
-	}
-	
-	// Init UGMA table with n x n dimension and write 0 to every cell
-	private double[][] initUGMA(List<Multialigment> aligments){
+
+	// Init UGMA table with n x n dimension and compute differencies between multialigments
+	private double[][] initUPGMA(List<Multialigment> aligments){
 		int n = aligments.size();
 		double result[][] = new double [n][n];
 		
@@ -96,8 +63,8 @@ public class UGMAAlignerService {
 	}
 	
 	// Returns pair with lowest difference
-	private BestUGMAPair findBestAligment(double matrix[][]){
-		BestUGMAPair bestPair = new BestUGMAPair();
+	private BestUPGMAPair findBestAligment(double matrix[][]){
+		BestUPGMAPair bestPair = new BestUPGMAPair();
 		bestPair.setDifference(Double.MAX_VALUE);
 		
 		int n = matrix.length;
@@ -116,7 +83,7 @@ public class UGMAAlignerService {
 	}
 	
 	// Updates every other cell with average between distances
-	private double[][] updateUGMAMatrix(double matrix[][], BestUGMAPair bestPair){	
+	private double[][] updateUGMAMatrix(double matrix[][], BestUPGMAPair bestPair){	
 		int n = matrix.length;
 		int a = bestPair.getFirstPosition();
 		int b = bestPair.getSecondPosition();
@@ -165,5 +132,34 @@ public class UGMAAlignerService {
 		}
 
 		return score;
+	}
+	
+	private double[][] initExampleUGMAMatrix(){
+		double result[][] = {
+			{0.0, 17.0, 21.0, 31.0, 23.0}, 
+			{17.0, 0.0, 30.0, 34.0, 21.0}, 
+			{21.0, 30.0, 0.0, 28.0, 39.0},
+			{31.0, 34.0, 28.0, 0.0, 43.0},
+			{23.0, 21.0, 39.0, 43.0, 0.0}
+		};
+		return result;
+	}
+	
+	private void printUPGMAMatrix(double matrix[][], List<Multialigment> sequences){
+		System.out.println("\nUGMA MATRIX: \n");
+		
+		int n = matrix.length;
+		//System.out.print(" \t");
+		//for(int i = 0; i < n; i++){
+		//	System.out.print(sequences.get(i) + "\t");
+		//}
+		System.out.println("");
+		for(int i = 0; i < n; i++){
+			//System.out.print(sequences.get(i) + "\t");
+			for(int j = 0; j < n; j++){
+				System.out.print(matrix[i][j]+"\t");
+			}
+			System.out.println("");
+		}
 	}
 }

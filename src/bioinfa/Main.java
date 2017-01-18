@@ -16,22 +16,30 @@ public class Main {
 	private static final String MULTIALIGMENT_EXAMPLE_FORMAT = "\nEXAMPLE MULTIALIGMENT:";
 	
 	public static void main(String[] args){
-		List<Sequence> sequencesA = Arrays.asList(new Sequence("TCCA"), 
-				new Sequence("AC-A"), new Sequence("ACC-"));
-		List<Sequence> sequencesB = Arrays.asList(new Sequence("TA-G"), 
-				new Sequence("CAT-"), new Sequence("-CCG"));
-
+		// Init example sequences
+		List<Sequence> sequencesA = Arrays.asList(
+				new Sequence("TCCA"), 
+				new Sequence("AC-A"), 
+				new Sequence("ACC-")
+		);
+		List<Sequence> sequencesB = Arrays.asList(
+				new Sequence("TA-G"), 
+				new Sequence("CAT-"), 
+				new Sequence("-CCG")
+		);
 		List<Sequence> sequencesC = Arrays.asList(
 				new Sequence("TAACG"),
 				new Sequence("CATT"),
-				new Sequence("ACCG"));
+				new Sequence("ACCG")
+		);
 
+		// Init example multialigments
 		Multialigment m1 = new Multialigment();
 		m1.getSequences().add(new Sequence("AAAAAGCA"));
 		Multialigment m2 = new Multialigment();
 		m2.getSequences().add(new Sequence("TCAAAGAGAT"));
 
-
+		// Display results of examples
 		presentProfiles(sequencesA);
 		presentProfiles(sequencesB);
 		presentJoinedProfiles(sequencesA, sequencesB);
@@ -50,7 +58,7 @@ public class Main {
 			m.getSequences().add(seq);
 			multialigments.add(m);
 		}
-		System.out.println(service.alignProgressiveWithUGMA(multialigments));
+		System.out.println(service.alignProgressiveWithUPGMA(multialigments));
 	}
 
 	private static void presentAligmentByProfile(Multialigment m1, Multialigment m2) {

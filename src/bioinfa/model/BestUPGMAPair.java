@@ -1,6 +1,6 @@
 package bioinfa.model;
 
-public class BestUGMAPair {
+public class BestUPGMAPair {
 	private int firstPosition;
 	private int secondPosition;
 	private double difference;
