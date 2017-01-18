@@ -25,12 +25,12 @@ public class ProgressiveAligner {
 
         double[][] matrix = new double[secondSequenceLength+1][firstSequenceLength+1];
 
-        //Uzupelnienie pierwszego wiersza
+        //Uzupelnienie pierwszego wiersza - jako że jest brak kary za przerwy to zawsze wyniesie 0
         for (int i = 1; i <= firstSequenceLength; i++) {
             matrix[0][i] = matrix[0][i-1] + upIndelCost(profile1, i);
         }
 
-        //Uzupelnienie pierwszej kolumny
+        //Uzupelnienie pierwszej kolumny - jako że jest brak kary za przerwy to zawsze wyniesie 0
         for (int i = 1; i <= secondSequenceLength; i++) {
             matrix[i][0] = matrix[i-1][0] + leftIndelCost(profile2, i);
         }
@@ -40,9 +40,9 @@ public class ProgressiveAligner {
             for (int j = 1; j <= firstSequenceLength; j++) {
                 //Koszt przejscie do lewego gornego rogu
                 double diagonalCost = getDiagonalCost(profile2, profile1, i, j);
-                //Koszt przejscie w lewo
+                //Koszt przejscie w lewo - jako że jest brak kary za przerwy to zawsze wyniesie 0
                 double leftCost = leftIndelCost(profile1,j);
-                //Koszt przejscia w gore
+                //Koszt przejscia w gore - jako że jest brak kary za przerwy to zawsze wyniesie 0
                 double upCost = upIndelCost(profile2,i);
                 matrix[i][j] = getMax(matrix[i-1][j-1]+diagonalCost,matrix[i][j-1]+leftCost,matrix[i-1][j]+upCost);
             }

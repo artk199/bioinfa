@@ -42,8 +42,9 @@ public class SimpleConsensusWordResolverTest {
         sequences.add(new Sequence("TCAAAGA--GAT"));
         sequences.add(new Sequence("--AAA-ACGGCT"));
 
+        System.out.println(sequences);
         Sequence result = resolver.resolve(sequences);
-
+        System.out.println(result);
         assertEquals("TCAAAGAMGGMW", result.toString());
     }
 

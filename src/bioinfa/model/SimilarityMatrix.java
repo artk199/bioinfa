@@ -103,7 +103,7 @@ public class SimilarityMatrix {
         if(similarity == null)
             init2();
         if(b == DNASymbol.EMPTY){
-            return -1;
+            return 0;
         }
         return similarity.get(a).get(b);
     }
