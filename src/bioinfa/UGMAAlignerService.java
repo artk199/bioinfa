@@ -11,36 +11,31 @@ import bioinfa.model.SimilarityMatrix;
 public class UGMAAlignerService {
 	private ProgressiveAligner aligner = new ProgressiveAligner();
 	
-	public Sequence alignProgressiveWithUGMA(List<Sequence> sequences){
-		double UGMAMatrix[][] = initUGMA(sequences);//initExampleUGMAMatrix();//
-		List<Sequence> alignedSequences = new ArrayList<>(sequences);
+	public Multialigment alignProgressiveWithUGMA(List<Multialigment> aligments){
+		double UGMAMatrix[][] = initUGMA(aligments);//initExampleUGMAMatrix();//
+		List<Multialigment> multialigments = new ArrayList<>(aligments);
 			
-		while(alignedSequences.size() > 1){
-			printUGMAMatrix(UGMAMatrix, sequences);
+		while(multialigments.size() > 1){
+			printUGMAMatrix(UGMAMatrix, aligments);
 			BestUGMAPair bestPair = findBestAligment(UGMAMatrix);
-			upadeAlignedSequences(alignedSequences, bestPair);		
+			upadeAlignedSequences(multialigments, bestPair);		
 			UGMAMatrix = updateUGMAMatrix(UGMAMatrix, bestPair);	
 		}
 		
-		return alignedSequences.get(0);
+		return multialigments.get(0);
 	}
 	
 	// Updates first sequence with aligned one and removes second from list
-	private void upadeAlignedSequences(List<Sequence> alignedSequences, BestUGMAPair bestPair){
-		Sequence firstSeq = alignedSequences.get(bestPair.getFirstPosition());
-		Sequence secondSeq = alignedSequences.get(bestPair.getSecondPosition());
-		Sequence alignedSeq = alignSequences(firstSeq, secondSeq);			
-		alignedSequences.set(bestPair.getFirstPosition(), alignedSeq);
+	private void upadeAlignedSequences(List<Multialigment> alignedSequences, BestUGMAPair bestPair){
+		Multialigment firstSeq = alignedSequences.get(bestPair.getFirstPosition());
+		Multialigment secondSeq = alignedSequences.get(bestPair.getSecondPosition());
+		Multialigment multialigment = alignSequences(firstSeq, secondSeq);			
+		alignedSequences.set(bestPair.getFirstPosition(), multialigment);
 		alignedSequences.remove(bestPair.getSecondPosition());
 	}
 	
-	private Sequence alignSequences(Sequence firstSeq, Sequence secondSeq){
-		Multialigment m1 = new Multialigment();
-		Multialigment m2 = new Multialigment();
-		m1.getSequences().add(firstSeq);
-		m2.getSequences().add(secondSeq);
-		Sequence result = aligner.alignByProfiles(m1, m2).getSequences().get(0);
-		return result;
+	private Multialigment alignSequences(Multialigment firstSeq, Multialigment secondSeq){
+		return aligner.alignByProfiles(firstSeq, secondSeq);
 	}
 	
 	private double[][] initExampleUGMAMatrix(){
@@ -54,7 +49,7 @@ public class UGMAAlignerService {
 		return result;
 	}
 	
-	private void printUGMAMatrix(double matrix[][], List<Sequence> sequences){
+	private void printUGMAMatrix(double matrix[][], List<Multialigment> sequences){
 		System.out.println("\nUGMA MATRIX: \n");
 		
 		int n = matrix.length;
@@ -73,8 +68,8 @@ public class UGMAAlignerService {
 	}
 	
 	// Init UGMA table with n x n dimension and write 0 to every cell
-	private double[][] initUGMA(List<Sequence> sequences){
-		int n = sequences.size();
+	private double[][] initUGMA(List<Multialigment> aligments){
+		int n = aligments.size();
 		double result[][] = new double [n][n];
 		
 		for(int i = 0; i < n - 1; i++){
@@ -84,9 +79,9 @@ public class UGMAAlignerService {
 					result[j][i] = 0;
 				}
 				else{
-					Sequence seqA = sequences.get(i);
-					Sequence seqB = sequences.get(j);
-					double diff = computeDifferenceBetweenSequences(seqA, seqB);
+					Multialigment m1 = aligments.get(i);
+					Multialigment m2 = aligments.get(j);
+					double diff = computeDifferenceBetweenSequences(m1, m2);
 					
 					result[i][j] = result[j][i] = diff;
 				}
@@ -151,14 +146,17 @@ public class UGMAAlignerService {
 	}
 	
 	// Returns double - information about how different are sequences (the less result, the less different)
-	private double computeDifferenceBetweenSequences(Sequence sequenceA, Sequence sequenceB){
-		Sequence longerSeq = sequenceA.getLength() > sequenceB.getLength() ? sequenceA : sequenceB;
-		Sequence smallerSeq = sequenceA.getLength() > sequenceB.getLength() ? sequenceB : sequenceA;
+	private double computeDifferenceBetweenSequences(Multialigment m1, Multialigment m2){
+		Multialigment longerSeq = m1.getLength() > m2.getLength() ? m1 : m2;
+		Multialigment smallerSeq = m1.getLength() > m2.getLength() ? m2 : m1;
 		
 		double diff = 0;
 		for(int i = 0; i < longerSeq.getLength(); i++){
-			DNASymbol firstSymbol = longerSeq.getSymbol(i);
-			DNASymbol secondSymbol = smallerSeq.getLength() > i ? smallerSeq.getSymbol(i) : DNASymbol.EMPTY;
+			// TODO: Obliczac to w lepszy sposob
+			Sequence ff1 = longerSeq.getSequences().get(0);
+			Sequence ff2 = smallerSeq.getSequences().get(0);
+			DNASymbol firstSymbol = ff1.getSymbol(i);
+			DNASymbol secondSymbol = ff2.getLength() > i ? ff2.getSymbol(i) : DNASymbol.EMPTY;
 			
 			diff += -1 * SimilarityMatrix.get(firstSymbol, secondSymbol);
 		}
