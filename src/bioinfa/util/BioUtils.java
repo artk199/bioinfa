@@ -8,6 +8,8 @@ import bioinfa.model.Sequence;
 
 import java.util.List;
 
+import javax.swing.text.MutableAttributeSet;
+
 /**
  * Created by Artur on 15.01.2017.
  */
@@ -44,5 +46,13 @@ public class BioUtils {
             }
             System.out.println();
         }
+    }
+    
+    public static Multialigment getMultialigmentFromSequencies(String ... sequences){
+    	Multialigment multialigment = new Multialigment();
+    	for(String seq : sequences){
+    		multialigment.getSequences().add(new Sequence(seq));
+		}
+    	return multialigment;
     }
 }

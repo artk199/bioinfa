@@ -30,16 +30,15 @@ public class Main {
 		List<Sequence> sequencesC = Arrays.asList(
 				new Sequence("TAACG"),
 				new Sequence("CATT"),
-				new Sequence("ACCG"),
-				new Sequence("TTT")
+				new Sequence("ACCG")
 		);
 
 		// Init example multialigments
-		Multialigment m1 = new Multialigment();
-		m1.getSequences().add(new Sequence("AAAAAGCA"));
-		Multialigment m2 = new Multialigment();
-		m2.getSequences().add(new Sequence("TCAAAGAGAT"));
-
+		Multialigment m1 = BioUtils.getMultialigmentFromSequencies("AAAAAGCA");
+		Multialigment m2 = BioUtils.getMultialigmentFromSequencies("TCAAAGAGAT");
+		Multialigment m3 = BioUtils.getMultialigmentFromSequencies("AAACATAG", "CCAAATGC");
+		Multialigment m4 = BioUtils.getMultialigmentFromSequencies("ATAG", "CCAA");
+		
 		// Display results of examples
 		presentProfiles(sequencesA);
 		presentProfiles(sequencesB);
@@ -48,6 +47,7 @@ public class Main {
 		presentConsensus(sequencesB);
 		presentAligmentByProfile(m1,m2);
 		presentUGMAAligment(sequencesC);
+		presentUGMAAligmentForMutlialigments(Arrays.asList(m1, m2, m3, m4));
 	}
 	
 	private static void presentUGMAAligment(List<Sequence> sequences){
@@ -60,7 +60,16 @@ public class Main {
 			m.getSequences().add(seq);
 			multialigments.add(m);
 		}
-		System.out.println(service.alignProgressiveWithUPGMA(multialigments));
+		Multialigment result = service.alignProgressiveWithUPGMA(multialigments);
+		System.out.println(result);
+	}
+	
+	private static void presentUGMAAligmentForMutlialigments(List<Multialigment> multialigments){
+		System.out.println("\nPROGRESSIVE ALIGMENT EXAMPLE");
+		System.out.println("... for multialigments: " + multialigments + "\n");
+		UGMAAlignerService service = new UGMAAlignerService();
+		Multialigment result = service.alignProgressiveWithUPGMA(multialigments);
+		System.out.println(result);
 	}
 
 	private static void presentAligmentByProfile(Multialigment m1, Multialigment m2) {
@@ -82,14 +91,14 @@ public class Main {
 		System.out.println(consensus);
 	}
 
-	public static void presentProfiles(List<Sequence> sequences){
+	private static void presentProfiles(List<Sequence> sequences){
 		System.out.println(String.format(PROFILE_EXAMPLE_FORMAT, sequences.toString()));
 		ProfileService profileService = new ProfileService();	
 		ProfileMatrix matrix = profileService.computeProfile(sequences);
 		BioUtils.printProfileMatrix(matrix);
 	}
 	
-	public static void presentJoinedProfiles(List<Sequence> sequencesA, List<Sequence> sequencesB){
+	private static void presentJoinedProfiles(List<Sequence> sequencesA, List<Sequence> sequencesB){
 		System.out.println(String.format(JOINED_PROFILE_EXAMPLE_FORMAT, sequencesA.toString(), sequencesB.toString()));
 		ProfileService profileService = new ProfileService();	
 		ProfileMatrix matrixA = profileService.computeProfile(sequencesA);
